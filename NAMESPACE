@@ -1,0 +1,12 @@
+importFrom(mvtnorm, rmvnorm)
+importFrom(preprocessCore, normalize.quantiles)
+importFrom(ISOpureR, ISOpure.step1.CPE, ISOpure.step2.PPE)
+importFrom(ROCR, prediction, performance, plot)
+importClassesFrom(ROCR, performance, prediction)
+importMethodsFrom(ROCR, plot)
+importFrom(WGCNA, adjacency)
+importFrom(minet, minet)
+importFrom(bnlearn, hc, bn.fit)
+
+
+export(oneStepSim, generate.Sigma, sim.expr, deconv, eval.ROC, netEstByMethod)
