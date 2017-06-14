@@ -34,7 +34,7 @@ oneStepSim <- function(n.samp, mu.T, mu.N, Sigma.T=NULL, Sigma.N=NULL, prop.T="s
   
   return(list("m.gene"=m.gene, "Sigma.T"=Sigma.T, "Sigma.N"=Sigma.N, "true.str.T"=true.str.T,
               "expr.pure.T"=out.expr$expr.pure.T, "expr.pure.N"=out.expr$expr.pure.N, 
-              "expr.mixed"=out.expr$expr.mixed, "true.prop"=prop.T))
+              "expr.mixed"=out.expr$expr.mixed, "true.prop"=out.expr$true.prop))
 }
 
 
