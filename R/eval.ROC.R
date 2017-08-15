@@ -5,7 +5,7 @@
 ##############
 
 
-eval.ROC <- function(est.str, true.str, plot.ROC=TRUE, show.AUC=TRUE, zoom=TRUE, ...){
+eval.ROC <- function(est.str, true.str, plot.ROC=TRUE, show.AUC=TRUE, zoom=TRUE, lightPDF=FALSE, ...){
   # if(sum(dim(est.str)!=dim(est.str))>0){stop("Error: est.str and true.str must have the same dimemsion.")}
   # if(!isSymmetric(unname(est.str))|!isSymmetric(unname(true.str))){stop("Error: est.str and true.str must be symmetric.")}
   
@@ -23,8 +23,15 @@ eval.ROC <- function(est.str, true.str, plot.ROC=TRUE, show.AUC=TRUE, zoom=TRUE,
   
   ## plot
   if(plot.ROC){
-    if(zoom){plot(perf, xlim=c(0,xval), ylim=c(0,yval), ...)}
-    else plot(perf)
+    perf.plot <- perf
+    if(lightPDF){
+      set.seed = 123
+      sparsePoints <- sort(sample(n.unique, 10000))
+      slot(perf.plot,"x.values")[[1]] <- slot(perf.plot,"x.values")[[1]][sparsePoints]
+      slot(perf.plot,"y.values")[[1]] <- slot(perf.plot,"y.values")[[1]][sparsePoints]
+    }
+    if(zoom){plot(perf.plot, xlim=c(0,xval), ylim=c(0,yval), ...)}
+    else plot(perf.plot, ...)
     if(show.AUC){legend("bottom",paste0("AUC=",round(auc.value,3)),bty = "n")}
   }
   
