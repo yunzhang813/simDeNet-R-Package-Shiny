@@ -17,9 +17,6 @@ deconv(mixed, ref, seed=123, ...)
   \item{seed}{random seed for reproducible result.}
   \item{...}{arguments passed to \code{ISOpure.step1.CPE()}.}
 }
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-}
 \value{
 A list of the following components:
   \item{expr.deconv}{estimated expression profiles (at the log2-transformed scale) for the targeted pure samples after deconvolution.}
@@ -34,9 +31,6 @@ A list of the following components:
   G Quon, QD Morris. \emph{ISOLATE: a computational strategy for identifying the primary origin of
   cancers using high-thoroughput sequencing}. Bioinformatics 2009, 25:2882-2889 
   \url{http://bioinformatics.oxfordjournals.org/content/25/21/2882}.
-}
-\author{
-%%  ~~who you are~~
 }
 \note{
 The original functions in the \code{ISOpureR} package input data at the raw scale (i.e. 2^x) and return the estimated profiles also at the raw scale. Our integrated function takes care the data transformation internally, so that it inputs and returns data at the log2-transformed scale, keeping consistancy with other functions in our package.

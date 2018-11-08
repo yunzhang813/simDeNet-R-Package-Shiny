@@ -8,7 +8,7 @@ Evaluate ROC and AUC
 This function performs ROC analysis for network estimation based on the \code{ROCR} package.
 }
 \usage{
-eval.ROC(est.str, true.str, plot.ROC=TRUE, show.AUC=TRUE, zoom=TRUE, ...)
+eval.ROC(est.str, true.str, plot.ROC=TRUE, show.AUC=TRUE, zoom=FALSE, lightPDF=FALSE, ...)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -16,12 +16,11 @@ eval.ROC(est.str, true.str, plot.ROC=TRUE, show.AUC=TRUE, zoom=TRUE, ...)
   \item{true.str}{symmetric matrix or array of symmetric matrices of true structure, usually with binary elements of 1 = edge and 0 = no edge. It should have the same dimension as \code{est.str}.}
   \item{plot.ROC}{logical value indicating if to plot the ROC curve. Default: \code{TRUE}.}
   \item{show.AUC}{logical value indicating if to show AUC on the plot. Default: \code{TRUE}.}
-  \item{zoom}{logical value indicating if to zoom-in the plot. Default: \code{TRUE}.}
+  \item{zoom}{logical value indicating if to zoom-in the plot. Default: \code{FALSE}.}
+  \item{lightPDF}{logical value indicating if to subsample points for plotting in a PDF. Default: \code{FALSE}.}
   \item{...}{arguments passed to \code{plot()}.}
 }
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-}
+
 \value{
 A list with the following components:
   \item{perf}{object of \code{performence-class}.}
@@ -29,21 +28,10 @@ A list with the following components:
   \item{xval}{maximum value plotted in the x-axis.}
   \item{yval}{maximum value plotted in the y-axis.}
 }
-\references{
-%% ~put references to the literature/web site here ~
-}
-\author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
-}
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
-\seealso{
-\code{\link[ROCR]{performence-class}} from the \code{ROCR} package.
-}
+
 \examples{
 ## Firstly, let's generate some data.
 set.seed(999)

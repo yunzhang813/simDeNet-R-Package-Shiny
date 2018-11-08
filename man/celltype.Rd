@@ -5,7 +5,7 @@
 The cell type data
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of the dataset. ~~
+Sample dataset of pure cell type microRNA abundance
 }
 \usage{data("celltype")}
 \format{
@@ -14,15 +14,6 @@ The cell type data
     \item{\code{expr}}{data matrix with 382 rows (miRNAs) and 32 columns (samples).}
     \item{\code{ctab}}{column information of \code{expr}.}
   }
-}
-\details{
-%%  ~~ If necessary, more details than the __description__ above ~~
-}
-\source{
-%%  ~~ reference to a publication or URL from which the data were obtained ~~
-}
-\references{
-%%  ~~ possibly secondary sources and usages ~~
 }
 \examples{
 data(celltype)

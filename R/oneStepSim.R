@@ -95,6 +95,7 @@ generate.Sigma <- function(m.gene, block.size, rho, dd=NULL, str.type="interchan
   if(sum(block.size)>m.gene){stop("Error: sum of block.size must be smaller than m.gene.")}
   if(length(rho)!=length(block.size)){stop("Error: rho and block.size must be have the same length.")}
   if(!is.null(dd)&length(dd)!=m.gene){stop("Error: dd must have length equal to m.gene.")}
+  if(length(str.type)!=length(block.size)&length(str.type)!=1){stop("Error: either specify one str.type for all the blocks or specify different str.type for each block.")}
   
   ## weight matrix
   if(is.null(dd)){dd <- rep(1,m.gene)}

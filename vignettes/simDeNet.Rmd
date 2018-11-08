@@ -1,5 +1,5 @@
 ---
-title: "Vignette for simDeNet"
+title: "Simulation Study Using 'simDeNet'"
 author: "Yun Zhang"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -9,36 +9,42 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-# Introduction
+## Introduction
+
+This package documents the functions for reproducing the simualation study for cell type mixture and deconvolution using pure cell type. Co-expression is evaluated based on absolute value of Pearson correlation.
 
 ```{r, package}
-## The package can be installed using the following code
-# library(devtools)
-# install_github("yunzhang813/???", build_vignettes=TRUE)
-
 ## Load the package
 library(simDeNet)
 ```
 
-# Sample data
+## Shiny application
 
+To lauch the Shiny application, please use the following code.
+
+```{r, shiny, eval=FALSE}
+runShiny()
+```
+
+## Sample data
+
+Load the working dataset for this vignette. More information see `help("celltype")`.
 ```{r, data, cache=TRUE}
 data("celltype")
 ```
 
-# One-step simulation
+## One-step simulation
+
+Set parameters, and generage simulated dataset.
 ```{r, sim, cache=TRUE}
 ## get two cell types
 mu.T <- expr[,ctab$Fastq_file_name[which(ctab$X3_letter_code=="ASM")]]
 mu.N <- expr[,ctab$Fastq_file_name[which(ctab$X3_letter_code=="AEC")]]
 
 ## parameters
-n.samp <- 5
-rho <- c(0.9,0.8,0.7)
-block.size <- c(5,10,15)
-dd <- NULL
-str.type <- "interchangeable"
-multiplier <- 1
+n.samp <- 20
+rho <- c(0.7,0.7,0.7)
+block.size <- c(30,30,30)
 select.gene <- "random"
 
 ## mixing proportion of cell type T
@@ -48,111 +54,36 @@ prop.T <- seq(0, 1, length=n.samp)
 set.seed(999)
 out.oneStepSim <- oneStepSim(n.samp, mu.T, mu.N, Sigma.T=NULL, Sigma.N=NULL, prop.T=prop.T, 
                       # structure for Sigma.T
-                      block.size=block.size, rho=rho, dd=dd, str.type=str.type, multiplier=1,
+                      block.size=block.size, rho=rho, dd=NULL, str.type="interchangeable",
                       # selected genes to add structure
                       select.gene=select.gene)
 ```
 
-# Deconvolution
+## Deconvolution
 
+'ISOpureR' deconvolution is customized here. This step may take time (YMMV).
 ```{r, deconv, cache=TRUE, warning=FALSE, results="hide"}
 ## deconvolution
-tt <- system.time(out.deconv <- deconv(mixed=out.oneStepSim$expr.mixed, ref=out.oneStepSim$expr.pure.N))
+out.deconv <- deconv(mixed=out.oneStepSim$expr.mixed, ref=out.oneStepSim$expr.pure.N)
 ```
 
-# Correlation-based network
+## ROC plot
 
-## One-step analysis for WGCNA
-```{r, onestep-wgcna, cache=TRUE, results="hide", message=FALSE, fig.align="center", fig.height=5, fig.width=5, fig.retina=2}
-## simulated data
-data.list <- list(out.oneStepSim$expr.pure.T, out.oneStepSim$expr.mixed, out.deconv$expr.deconv)
-names(data.list) <- c("pure","mixed","deconvoluted")
-## ture structure
+Calculate absolute value of Pearson correlation, and plot the ROC curves.
+```{r, plot, cache=TRUE, fig.align="center", fig.width=7, fig.height=7}
+## true structure
 true.str <- out.oneStepSim$true.str.T
 
-## one step analysis
-out.WGCNA <- oneStepAnalysis(data.list,true.str,method="WGCNA")
+## correlation estimations
+acor <- function(x){abs(cor(t(x)))}
+acor.pure <- acor(out.oneStepSim$expr.pure.T)
+acor.mixed <- acor(out.oneStepSim$expr.mixed)
+acor.deconv <- acor(out.deconv$expr.deconv)
 
-## plot ROC curves
-plot(out.WGCNA$pure$perf, lwd=2)
-plot(out.WGCNA$mixed$perf, add=TRUE, col=2, lwd=2)
-plot(out.WGCNA$deconvoluted$perf, add=TRUE, col=3, lwd=2)
-legend("bottomright", paste(c("pure","mixed","deconv"), ": AUC =", round(c(out.WGCNA$pure$AUC, out.WGCNA$mixed$AUC, out.WGCNA$deconvoluted$AUC),3)), col=1:3, lty=1, lwd=5)
-title(paste("WGCNA"))
-```
-
-
-## Step-by-step analysis for WGCNA
-
-### Network estimation
-```{r, wgcna, cache=TRUE, results="hide"}
-library(WGCNA)
-## If softPower = 1, the adjacency matrix is simply the absolute correlation matrix
-softPower <- 1
-## pure samples
-datExpr.pure <- as.data.frame(t(out.oneStepSim$expr.pure.T)) # NOTE: rows=samples, columns=genes
-est.str.pure <- adjacency(datExpr.pure, power = softPower)
-## mixed samples
-datExpr.mixed <- as.data.frame(t(out.oneStepSim$expr.mixed)) # NOTE: rows=samples, columns=genes
-est.str.mixed <- adjacency(datExpr.mixed, power = softPower)
-## deconvoluted samples
-datExpr.deconv <- as.data.frame(t(out.deconv$expr.deconv)) # NOTE: rows=samples, columns=genes
-est.str.deconv <- adjacency(datExpr.deconv, power = softPower)
-```
-
-### ROC analysis
-```{r, roc-wgcna, cache=FALSE, message=FALSE, fig.align="center", fig.height=5, fig.width=5, fig.retina=2}
-## evaluate ROC and AUC
-out.ROC.pure <- eval.ROC(est.str=est.str.pure, true.str=out.oneStepSim$true.str.T, 
-                         plot.ROC=TRUE, main="Pure samples")
-out.ROC.mixed <- eval.ROC(est.str=est.str.mixed, true.str=out.oneStepSim$true.str.T,
-                          plot.ROC=TRUE, col=2, main="Mixed samples")
-out.ROC.deconv <- eval.ROC(est.str=est.str.deconv, true.str=out.oneStepSim$true.str.T,
-                           plot.ROC=TRUE, col=3, main="Deconvoluted samples")
-
-## combined plot
-library(ROCR)
-plot(out.ROC.pure$perf, lwd=2)
-plot(out.ROC.mixed$perf, add=TRUE, col=2, lwd=2)
-plot(out.ROC.deconv$perf, add=TRUE, col=3, lwd=2)
-legend("bottomright", paste(c("pure","mixed","deconv"), ": AUC =", round(c(out.ROC.pure$AUC, out.ROC.mixed$AUC, out.ROC.deconv$AUC),3)), col=1:3, lty=1, lwd=5)
-title(paste("WGCNA", paste0("S",n.samp), str.type, select.gene, sep = ", "))
-abline(0,1,col="grey")
-```
-
-# Other networks
-
-## Mutual information network
-
-### Network estimation
-```{r, aracne, cache=TRUE, results="hide"}
-library(minet)
-
-## pure tumor samples
-net.pure <- minet(datExpr.pure, method = "aracne")
-## mixed samples
-net.mixed <- minet(datExpr.mixed, method = "aracne")
-## ISOpure tumor samples
-net.deconv <- minet(datExpr.deconv, method = "aracne")
-```
-
-### ROC analysis
-```{r, roc-aracne, cache=TRUE, fig.align="center", fig.height=5, fig.width=5, fig.retina=2}
-## evaluate ROC and AUC
-out.ROC.pure <- eval.ROC(est.str=net.pure, true.str=out.oneStepSim$true.str.T, 
-                         plot.ROC=TRUE, main="Pure samples")
-out.ROC.mixed <- eval.ROC(est.str=net.mixed, true.str=out.oneStepSim$true.str.T, 
-                          plot.ROC=TRUE, main="Mixed samples", col=2)
-out.ROC.deconv <- eval.ROC(est.str=net.deconv, true.str=out.oneStepSim$true.str.T, 
-                           plot.ROC=TRUE, main="Deconvoluted samples", col=3)
-
-## combined plot
-plot(out.ROC.pure$perf,
-     # xlim=c(0,max(out.ROC.pure$xval,out.ROC.mixed$xval,out.ROC.deconv$xval)),
-     # ylim=c(0,max(out.ROC.pure$yval,out.ROC.mixed$yval,out.ROC.deconv$yval)),
-     lwd=2)
-plot(out.ROC.mixed$perf, lwd=2, add=TRUE, col=2)
-plot(out.ROC.deconv$perf, lwd=2, add=TRUE, col=3)
-legend("bottomright", paste(c("pure","mixed","deconv"), ": AUC =", round(c(out.ROC.pure$AUC, out.ROC.mixed$AUC, out.ROC.deconv$AUC),3)), col=1:3, lwd=5)
-title(paste("ARACNE", paste0("S",n.samp), str.type, select.gene, sep = ", "))
+## plot
+cbPalette <- c("#999999", "#E69F00", "#56B4E9")
+temp1 <- eval.ROC(est.str=acor.pure, true.str=true.str, plot.ROC=TRUE, show.AUC=FALSE, lwd=2, col=cbPalette[1])
+  temp2 <- eval.ROC(est.str=acor.mixed, true.str=true.str, plot.ROC=TRUE, show.AUC=FALSE, add=TRUE, col=cbPalette[2], lwd=2)
+  temp3 <- eval.ROC(est.str=acor.deconv, true.str=true.str, plot.ROC=TRUE, show.AUC=FALSE, add=TRUE, col=cbPalette[3], lwd=2)
+  legend("bottomright", paste0(c("pure","mixed","deconv"), ": AUC = ", round(c(temp1$AUC, temp2$AUC, temp3$AUC),3)), col=cbPalette[1:3], lty=1, lwd=5, bty="n")
 ```

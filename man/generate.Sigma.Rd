@@ -8,7 +8,7 @@ Generate covariance matrix
 This function generates a matrix with block-wise customized structure.
 }
 \usage{
-generate.Sigma(m.gene, block.size, rho, dd=NULL, str.type="interchangeable", multiplier=1)
+generate.Sigma(m.gene, block.size, rho, dd=NULL, str.type="interchangeable")
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -18,29 +18,13 @@ generate.Sigma(m.gene, block.size, rho, dd=NULL, str.type="interchangeable", mul
   \item{dd}{diagnal entries of the weight matrix. It should have length equal to \code{m.gene}. If \code{NULL}, all 1's will be assigned.}
   \item{str.type}{types of block structure. Options: \code{"interchangeable"} (default) assumes an interchangeable correlation in the block; \code{"decaying"} is an AR(1) model; \code{"star"} gives a star-shape structure. It can also be a vector of mixed types, but should have the same length as \code{rho}.}
 }
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-}
+
 \value{
 A list with the following components:
   \item{Sigma}{a covariance matrix with customized structure.}
   \item{true.str}{true structure in generated \code{Sigma}. A matrix with 0 (no structure) and 1 (an edge).}
 }
-\references{
-%% ~put references to the literature/web site here ~
-}
-\author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
-}
 
-%% ~Make other sections like Warning with \section{Warning }{....} ~
-
-\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
-}
 \examples{
 ## a correlation matrix with three designed blocks
 Sigma.str1 <- generate.Sigma(m.gene=35, block.size=c(5,10,15), rho=c(0.9,0.8,0.7),

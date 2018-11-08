@@ -31,15 +31,7 @@ A list with the following components:
   \item{expr.mixed}{expression matrix for mixed cell types.}
 }
 
-\references{
-%% ~put references to the literature/web site here ~
-}
-\author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
-}
+
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
@@ -67,7 +59,7 @@ str.type <- c("interchangeable","decaying","star")
 prop.T <- seq(0, 1, length=n.samp)
 
 ## generate covariance matrices
-out.Sigma.T <- generate.Sigma(m.gene=m.gene, dd=rep(1,m.gene), rho=rho, block.size=block.size, str.type=str.type, multiplier=multiplier)
+out.Sigma.T <- generate.Sigma(m.gene=m.gene, dd=rep(1,m.gene), rho=rho, block.size=block.size, str.type=str.type)
 Sigma.T <- out.Sigma.T$Sigma
 Sigma.N <- diag(m.gene) # identity matrix
 

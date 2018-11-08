@@ -44,15 +44,7 @@ A list with the following components:
   \item{expr.mixed}{expression matrix for mixed cell types.}
   \item{prop.T}{true proportions of cell type T in mixed samples.}
 }
-\references{
-%% ~put references to the literature/web site here ~
-}
-\author{
-%%  ~~who you are~~
-}
-\note{
-%%  ~~further notes~~
-}
+
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
@@ -84,15 +76,10 @@ prop.T <- runif(n.samp)
 
 ## one-step simulation
 out.oneStepSim <- oneStepSim(n.samp, mu.T, mu.N, Sigma.T=NULL, Sigma.N=NULL, prop.T=prop.T, 
-                      # structure for Sigma.T
-                      dd=NULL, rho=rho, block.size=block.size, str.type=str.type,
-                      # selected genes to add structure
-                      select.gene=select.gene)
-                      
-## If Sigma.T and Sigma.N are given as identity matrices, and use default mixing proportions
-out.oneStepSim2 <- oneStepSim(n.samp, mu.T, mu.N, Sigma.T=diag(length(mu.T)), Sigma.N=diag(length(mu.N)))
-## the default mixing proportions for cell type T
-out.oneStepSim2$prop.T
+                             # structure for Sigma.T
+                             dd=NULL, rho=rho, block.size=block.size, str.type=str.type,
+                             # selected genes to add structure
+                             select.gene=select.gene)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
