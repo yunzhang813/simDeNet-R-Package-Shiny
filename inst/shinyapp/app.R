@@ -17,7 +17,7 @@ data("celltype")
 data("microRNAome_avg_exprs")
 
 ui <- dashboardPage(
-  dashboardHeader(title="One-Step Simulation"),
+  dashboardHeader(title="Simulation of cell type mixture and its effect on gene co-expression"),
   dashboardSidebar(disable=TRUE), 
   dashboardBody(
     fluidRow(

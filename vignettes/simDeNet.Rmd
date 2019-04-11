@@ -9,12 +9,18 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-## Introduction
-
 This package documents the functions for reproducing the simualation study for cell type mixture and deconvolution using pure cell type. Co-expression is evaluated based on absolute value of Pearson correlation.
 
+## Installation
+
+This package can be installed from the GitHub repository using the following code.
+```{r, installation, eval=FALSE}
+library(devtools)
+install_github("yunzhang813/simDeNet-R-Package-Shiny")
+```
+
+Load the package.
 ```{r, package}
-## Load the package
 library(simDeNet)
 ```
 
@@ -26,14 +32,12 @@ To lauch the Shiny application, please use the following code.
 runShiny()
 ```
 
-## Sample data
+## One-step simulation
 
 Load the working dataset for this vignette. More information see `help("celltype")`.
 ```{r, data, cache=TRUE}
 data("celltype")
 ```
-
-## One-step simulation
 
 Set parameters, and generage simulated dataset.
 ```{r, sim, cache=TRUE}
