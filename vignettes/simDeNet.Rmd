@@ -16,7 +16,7 @@ This package documents the functions for reproducing the simualation study for c
 This package can be installed from the GitHub repository using the following code.
 ```{r, installation, eval=FALSE}
 library(devtools)
-install_github("yunzhang813/simDeNet-R-Package-Shiny")
+install_github("yunzhang813/simDeNet-R-Package-Shiny", build_vignettes=TRUE)
 ```
 
 Load the package.
@@ -31,6 +31,12 @@ To lauch the Shiny application, please use the following code.
 ```{r, shiny, eval=FALSE}
 runShiny()
 ```
+
+Follow the steps below to run your own simulation study of cell type mixture.
+
+![Steps to run Shiny app.](Shiny-steps.png){width=600px}
+
+The Shiny only app shows pure and mixed samples. Due to computational cost, interested users may follow this vignette and use the `deconv()` function from this package to get the deconvolution results by 'ISOpureR'.
 
 ## One-step simulation
 
@@ -74,7 +80,7 @@ out.deconv <- deconv(mixed=out.oneStepSim$expr.mixed, ref=out.oneStepSim$expr.pu
 ## ROC plot
 
 Calculate absolute value of Pearson correlation, and plot the ROC curves.
-```{r, plot, cache=TRUE, fig.align="center", fig.width=7, fig.height=7}
+```{r, plot, cache=TRUE, fig.align="center", fig.width=5, fig.height=5}
 ## true structure
 true.str <- out.oneStepSim$true.str.T
 
@@ -87,7 +93,8 @@ acor.deconv <- acor(out.deconv$expr.deconv)
 ## plot
 cbPalette <- c("#999999", "#E69F00", "#56B4E9")
 temp1 <- eval.ROC(est.str=acor.pure, true.str=true.str, plot.ROC=TRUE, show.AUC=FALSE, lwd=2, col=cbPalette[1])
-  temp2 <- eval.ROC(est.str=acor.mixed, true.str=true.str, plot.ROC=TRUE, show.AUC=FALSE, add=TRUE, col=cbPalette[2], lwd=2)
-  temp3 <- eval.ROC(est.str=acor.deconv, true.str=true.str, plot.ROC=TRUE, show.AUC=FALSE, add=TRUE, col=cbPalette[3], lwd=2)
-  legend("bottomright", paste0(c("pure","mixed","deconv"), ": AUC = ", round(c(temp1$AUC, temp2$AUC, temp3$AUC),3)), col=cbPalette[1:3], lty=1, lwd=5, bty="n")
+temp2 <- eval.ROC(est.str=acor.mixed, true.str=true.str, plot.ROC=TRUE, show.AUC=FALSE, add=TRUE, col=cbPalette[2], lwd=2)
+temp3 <- eval.ROC(est.str=acor.deconv, true.str=true.str, plot.ROC=TRUE, show.AUC=FALSE, add=TRUE, col=cbPalette[3], lwd=2)
+abline(0, 1, lty=3, lwd=2)
+legend("bottomright", paste0(c("pure","mixed","deconv"), ": AUC = ", round(c(temp1$AUC, temp2$AUC, temp3$AUC),3)), col=cbPalette[1:3], lty=1, lwd=5, bty="n")
 ```

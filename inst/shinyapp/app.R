@@ -17,7 +17,7 @@ data("celltype")
 data("microRNAome_avg_exprs")
 
 ui <- dashboardPage(
-  dashboardHeader(title="Simulation of cell type mixture and its effect on gene co-expression"),
+  dashboardHeader(title="Cell type mixture"),
   dashboardSidebar(disable=TRUE), 
   dashboardBody(
     fluidRow(
@@ -30,7 +30,7 @@ ui <- dashboardPage(
                title="Parameters", status="info", width=NULL,
                wellPanel(style="overflow-y:scroll; max-height:800px",
                          p("One Step Simulation"),
-                         p("This function simulates pure and mixed cell type expression data for two cell types, namely 1 and 2. The simulation is based on multivariate normal (MVN) distribution. Enter parameters for the variables below!"),
+                         p("This function simulates pure and mixed cell type expression data for two cell types, namely 1 (target) and 2 (null), for your picked cell types and designed correlation structure for the target cell type. Set your parameters for the variables below!"),
                          textInput(inputId="nSamp", label="Enter # of samples to simulate for each celltype: ", value="20"),
                          selectInput(inputId="muT", label="Enter cell type 1 (Target): ", c("Choose your dataset first!"), selected="Choose your dataset first!"),
                          selectInput(inputId="muN", label="Enter cell type 2 (Null): ", c("Choose your dataset first!"), selected="Choose your dataset first!"),
