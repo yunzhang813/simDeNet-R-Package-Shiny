@@ -1,4 +1,4 @@
-# Interactive exploration of correlation induced by tissue composition
+# Interactive exploration of the effect of tissue composition on gene co-expression
 
 ## Getting Started
 
@@ -8,13 +8,15 @@ install.packages("devtools")
 devtools::install_github("yunzhang813/simDeNet-R-Package-Shiny")
 ```
 
-Launch Shiny application:
+Launch Shiny application for interactive exploration using pre-uploaded pure cell type data:
 ```R
 library(simDeNet)
 runShiny()
 ```
+![](vignettes/Shiny-steps.png)
 
-Browse vignette:
+
+Browse vignette for other useful functions included in the pakcage:
 ```R
 browseVignettes("simDeNet")
 ```
