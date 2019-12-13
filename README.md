@@ -22,4 +22,4 @@ browseVignettes("simDeNet")
 ```
 
 ## Citation
-Zhang, Y., Cuerdo, J., Halushka, M.K. and McCall, M.N., 2018. The effect of tissue composition on gene co-expression. *bioRxiv*, p.492223.
+Yun Zhang, Jonavelle Cuerdo, Marc K Halushka, Matthew N McCall, 2019. The effect of tissue composition on gene co-expression, *Briefings in Bioinformatics*, bbz135, https://doi.org/10.1093/bib/bbz135
